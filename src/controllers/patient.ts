@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { PatientService, AppointmentService } from '../services';
 
 @Controller('patients')
@@ -9,8 +9,8 @@ export class PatientController {
   ) {}
 
   @Get()
-  async list(@Query('specialty') specialty: string) {
-    return await this.patientService.list(specialty);
+  async list() {
+    return await this.patientService.list();
   }
 
   @Get(':id')
