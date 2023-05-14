@@ -8,9 +8,9 @@ export class Address extends BaseEntity {
   @Column({ nullable: false })
   addressLine: string;
 
-  @Column('float', { nullable: false })
+  @Column('decimal', { precision: 10, scale: 8, nullable: false })
   latitude: number;
 
-  @Column('float', { nullable: false })
+  @Column('decimal', { precision: 11, scale: 8, nullable: false })
   longitude: number;
 }

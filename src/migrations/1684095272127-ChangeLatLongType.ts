@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class ChangeLatLongType1684094807045 implements MigrationInterface {
-    name = 'ChangeLatLongType1684094807045'
+export class ChangeLatLongType1684095272127 implements MigrationInterface {
+    name = 'ChangeLatLongType1684095272127'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -9,14 +9,14 @@ export class ChangeLatLongType1684094807045 implements MigrationInterface {
         `);
         await queryRunner.query(`
             ALTER TABLE \`address\`
-            ADD \`latitude\` float NOT NULL
+            ADD \`latitude\` decimal(10, 8) NOT NULL
         `);
         await queryRunner.query(`
             ALTER TABLE \`address\` DROP COLUMN \`longitude\`
         `);
         await queryRunner.query(`
             ALTER TABLE \`address\`
-            ADD \`longitude\` float NOT NULL
+            ADD \`longitude\` decimal(11, 8) NOT NULL
         `);
     }
 
@@ -26,14 +26,14 @@ export class ChangeLatLongType1684094807045 implements MigrationInterface {
         `);
         await queryRunner.query(`
             ALTER TABLE \`address\`
-            ADD \`longitude\` int NOT NULL
+            ADD \`longitude\` float(12) NOT NULL
         `);
         await queryRunner.query(`
             ALTER TABLE \`address\` DROP COLUMN \`latitude\`
         `);
         await queryRunner.query(`
             ALTER TABLE \`address\`
-            ADD \`latitude\` int NOT NULL
+            ADD \`latitude\` float(12) NOT NULL
         `);
     }
 
