@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { AddAvailability, Availability } from './availability';
+import { Availability } from './availability';
 import { Specialty } from './specialty';
 import { Appointment } from './appointment';
 import { Clinic } from './clinic';
@@ -33,14 +33,4 @@ export class Doctor extends BaseEntity {
   @ManyToMany(() => Specialty, specialty => specialty.doctors)
   @JoinTable()
   specialties: Specialty[];
-}
-
-export interface AddDoctor {
-  fullname: string;
-  registrationNumber: string;
-  picture: string;
-  rating: number;
-  clinics: number[];
-  specialties: number[];
-  availability: AddAvailability[];
 }

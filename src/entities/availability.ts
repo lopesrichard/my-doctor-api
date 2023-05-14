@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DayOfWeek } from './day-of-week';
+import { DayOfWeek } from '../enums/day-of-week';
 import { Doctor } from './doctor';
 
 @Entity()
@@ -18,10 +18,4 @@ export class Availability extends BaseEntity {
 
   @ManyToOne(() => Doctor, doctor => doctor.availability, { nullable: false })
   doctor: Doctor;
-}
-
-export interface AddAvailability {
-  dayOfWeek: DayOfWeek;
-  startTime: string;
-  endTime: string;
 }

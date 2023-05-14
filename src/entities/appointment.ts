@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { AppointmentStatus } from './appointment-status';
+import { AppointmentStatus } from '../enums/appointment-status';
 import { Clinic } from './clinic';
 import { Doctor } from './doctor';
 import { Patient } from './patient';
@@ -23,16 +23,4 @@ export class Appointment extends BaseEntity {
 
   @ManyToOne(() => Patient, patient => patient.appointments, { nullable: false })
   patient: Patient;
-}
-
-export interface AddAppointment {
-  status: AppointmentStatus;
-  scheduledTo: Date;
-  clinic_id: number;
-  doctor_id: number;
-  patient_id: number;
-}
-
-export interface UpdateAppointment {
-  status: AppointmentStatus;
 }

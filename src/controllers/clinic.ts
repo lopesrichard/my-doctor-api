@@ -1,12 +1,17 @@
-import { Request, Response } from 'express';
-import * as Service from '../services/clinic';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ClinicService } from '../services/clinic';
 
-export const get = async (req: Request, res: Response) => {
-  const clinic = await Service.get(parseInt(req.params.id));
-  res.json(clinic);
-};
+@Controller('clinics')
+export class ClinicController {
+  constructor(private readonly service: ClinicService) {}
 
-export const list = async (req: Request, res: Response) => {
-  const clinics = await Service.list();
-  res.json(clinics);
-};
+  @Get()
+  async list() {
+    return await this.service.list();
+  }
+
+  @Get(':id')
+  async get(@Param('id') id: number) {
+    return await this.service.get(id);
+  }
+}

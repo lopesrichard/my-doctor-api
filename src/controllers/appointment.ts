@@ -1,36 +1,42 @@
-import { Request, Response } from 'express';
-import { AddAppointment, Appointment, UpdateAppointment } from '../entities/appointment';
-import { AppointmentStatus } from '../entities/appointment-status';
-import * as Service from '../services/appointment';
+import { AddAppointment, UpdateAppointment } from '../models';
+import { AppointmentStatus } from '../enums/appointment-status';
 
-export const getByDoctor = async (req: Request, res: Response) => {
-  const doctor = await Service.getByDoctor(parseInt(req.params.id));
-  res.json(doctor);
-};
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { AppointmentService } from '../services/appointment';
 
-export const getByPatient = async (req: Request, res: Response) => {
-  const doctor = await Service.getByPatient(parseInt(req.params.id));
-  res.json(doctor);
-};
+@Controller('appointments')
+export class AppointmentController {
+  constructor(private readonly service: AppointmentService) {}
 
-export const insert = async (req: Request, res: Response) => {
-  const data: AddAppointment = {
-    status: AppointmentStatus.OPEN,
-    scheduledTo: new Date(req.body.scheduledTo),
-    clinic_id: req.body.clinic_id,
-    doctor_id: req.body.doctor_id,
-    patient_id: req.body.patient_id,
-  };
+  // @Get('doctors/:id/appointments')
+  // async getByDoctor(@Param('id') id: number) {
+  //   return await this.service.getByDoctor(id);
+  // }
 
-  const appointment = await Service.insert(data);
+  // @Get('patients/:id/appointments')
+  // async getByPatient(@Param('id') id: number) {
+  //   return await this.service.getByPatient(id);
+  // }
 
-  res.json(appointment);
-};
+  @Get()
+  async list() {
+    return await this.service.list();
+  }
 
-export const cancel = async (req: Request, res: Response) => {
-  const data: UpdateAppointment = {
-    status: AppointmentStatus.CANCELED,
-  };
-  const appointment = await Service.update(parseInt(req.params.id), data);
-  res.json(appointment);
-};
+  @Get(':id')
+  async get(@Param('id') id: number) {
+    return await this.service.get(id);
+  }
+
+  @Post()
+  async insert(@Body() data: AddAppointment) {
+    data.status = AppointmentStatus.OPEN;
+    return await this.service.insert(data);
+  }
+
+  @Put(':id/cancel')
+  async cancel(@Param('id') id: number) {
+    const data: UpdateAppointment = { status: AppointmentStatus.CANCELED };
+    return await this.service.update(id, data);
+  }
+}

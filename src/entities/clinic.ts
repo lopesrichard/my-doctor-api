@@ -9,7 +9,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { AddAddress, Address } from './address';
+import { Address } from './address';
 import { Appointment } from './appointment';
 import { Doctor } from './doctor';
 
@@ -31,9 +31,4 @@ export class Clinic extends BaseEntity {
   @ManyToMany(() => Doctor, doctor => doctor.clinics)
   @JoinTable()
   doctors: Doctor[];
-}
-
-export interface AddClinic {
-  name: string;
-  address: AddAddress;
 }

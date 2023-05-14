@@ -1,37 +1,46 @@
-import { AddAppointment, Appointment, UpdateAppointment } from '../entities/appointment';
+import { Injectable } from '@nestjs/common';
+import { Appointment } from '../entities';
+import { AddAppointment, UpdateAppointment } from '../models';
 
-export const get = async (id: number): Promise<Appointment | null> => {
-  return await Appointment.findOne({ where: { id }, relations: { clinic: true, doctor: true } });
-};
+@Injectable()
+export class AppointmentService {
+  async list(): Promise<Appointment[]> {
+    return await Appointment.find({ relations: { clinic: true, doctor: true, patient: true } });
+  }
 
-export const getByPatient = async (id: number): Promise<Appointment[]> => {
-  return await Appointment.find({
-    where: { patient: { id } },
-    order: { scheduledTo: -1 },
-    relations: { clinic: true, doctor: true },
-  });
-};
+  async get(id: number): Promise<Appointment | null> {
+    return await Appointment.findOne({ where: { id }, relations: { clinic: true, doctor: true, patient: true } });
+  }
 
-export const getByDoctor = async (id: number): Promise<Appointment[]> => {
-  return await Appointment.find({
-    where: { doctor: { id } },
-    order: { scheduledTo: -1 },
-    relations: { clinic: true, doctor: true },
-  });
-};
+  async getByPatient(id: number): Promise<Appointment[]> {
+    return await Appointment.find({
+      where: { patient: { id } },
+      order: { scheduledTo: -1 },
+      relations: { clinic: true, doctor: true },
+    });
+  }
 
-export const insert = async (data: AddAppointment): Promise<Appointment> => {
-  const appointment = Appointment.create({
-    status: data.status,
-    scheduledTo: data.scheduledTo,
-    clinic: { id: data.clinic_id },
-    doctor: { id: data.doctor_id },
-    patient: { id: data.patient_id },
-  });
-  return await Appointment.save(appointment);
-};
+  async getByDoctor(id: number): Promise<Appointment[]> {
+    return await Appointment.find({
+      where: { doctor: { id } },
+      order: { scheduledTo: -1 },
+      relations: { clinic: true, doctor: true },
+    });
+  }
 
-export const update = async (id: number, data: UpdateAppointment): Promise<Appointment> => {
-  const appointment = Appointment.create({ id: id, status: data.status });
-  return await Appointment.save(appointment);
-};
+  async insert(data: AddAppointment): Promise<Appointment> {
+    const appointment = Appointment.create({
+      status: data.status,
+      scheduledTo: data.scheduledTo,
+      clinic: { id: data.clinic_id },
+      doctor: { id: data.doctor_id },
+      patient: { id: data.patient_id },
+    });
+    return await Appointment.save(appointment);
+  }
+
+  async update(id: number, data: UpdateAppointment): Promise<Appointment> {
+    const appointment = Appointment.create({ id: id, status: data.status });
+    return await Appointment.save(appointment);
+  }
+}

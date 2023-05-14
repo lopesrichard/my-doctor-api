@@ -1,13 +1,22 @@
-import { Request, Response } from 'express';
-import * as Service from '../services/doctor';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { DoctorService, AppointmentService } from '../services';
 
-export const get = async (req: Request, res: Response) => {
-  const doctor = await Service.get(parseInt(req.params.id));
-  res.json(doctor);
-};
+@Controller('doctors')
+export class DoctorController {
+  constructor(private readonly doctorService: DoctorService, private readonly appointmentService: AppointmentService) {}
 
-export const list = async (req: Request, res: Response) => {
-  const specialty = req.query.specialty as string;
-  const doctors = await Service.list(specialty);
-  res.json(doctors);
-};
+  @Get()
+  async list(@Query('specialty') specialty: string) {
+    return await this.doctorService.list(specialty);
+  }
+
+  @Get(':id')
+  async get(@Param('id') id: number) {
+    return await this.doctorService.get(id);
+  }
+
+  @Get(':id/appointments')
+  async appointments(@Param('id') id: number) {
+    return await this.appointmentService.getByDoctor(id);
+  }
+}

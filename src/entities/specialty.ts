@@ -18,9 +18,3 @@ export class Specialty extends BaseEntity {
   @ManyToMany(() => Doctor, doctor => doctor.specialties)
   doctors: Doctor[];
 }
-
-export interface AddSpecialty {
-  code: string;
-  description: string;
-  icon: string;
-}

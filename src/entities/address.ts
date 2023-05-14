@@ -14,9 +14,3 @@ export class Address extends BaseEntity {
   @Column({ nullable: false })
   longitude: number;
 }
-
-export interface AddAddress {
-  addressLine: string;
-  latitude: number;
-  longitude: number;
-}

@@ -1,7 +1,17 @@
-import { Request, Response } from 'express';
-import * as Service from '../services/specialty';
+import { Controller, Get, Param } from '@nestjs/common';
+import { SpecialtyService } from '../services/specialty';
 
-export const list = async (req: Request, res: Response) => {
-  const specialties = await Service.list();
-  res.json(specialties);
-};
+@Controller('specialties')
+export class SpecialtyController {
+  constructor(private readonly service: SpecialtyService) {}
+
+  @Get()
+  async list() {
+    return await this.service.list();
+  }
+
+  @Get(':id')
+  async get(@Param('id') id: number) {
+    return await this.service.get(id);
+  }
+}
