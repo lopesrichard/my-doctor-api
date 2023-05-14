@@ -10,6 +10,7 @@ async function main() {
   db.config();
   await db.connect();
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.listen(3000);
 }
