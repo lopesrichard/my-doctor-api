@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as Service from '../services/doctor';
 
 export const get = async (req: Request, res: Response) => {
-  const doctor = await Service.get(req.params.id);
+  const doctor = await Service.get(parseInt(req.params.id));
   res.json(doctor);
 };
 

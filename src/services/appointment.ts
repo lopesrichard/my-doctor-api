@@ -1,17 +1,37 @@
-import { Appointment } from '../models/appointment';
+import { AddAppointment, Appointment, UpdateAppointment } from '../entities/appointment';
 
-export const getByPatient = async (id: string): Promise<Appointment[]> => {
-  return await Appointment.find({ patient_id: id }).sort({ scheduledTo: -1 });
+export const get = async (id: number): Promise<Appointment | null> => {
+  return await Appointment.findOne({ where: { id }, relations: { clinic: true, doctor: true } });
 };
 
-export const getByDoctor = async (id: string): Promise<Appointment[]> => {
-  return await Appointment.find({ doctor_id: id }).sort({ scheduledTo: -1 });
+export const getByPatient = async (id: number): Promise<Appointment[]> => {
+  return await Appointment.find({
+    where: { patient: { id } },
+    order: { scheduledTo: -1 },
+    relations: { clinic: true, doctor: true },
+  });
 };
 
-export const insert = async (appointment: Appointment): Promise<Appointment> => {
-  return await Appointment.create(appointment);
+export const getByDoctor = async (id: number): Promise<Appointment[]> => {
+  return await Appointment.find({
+    where: { doctor: { id } },
+    order: { scheduledTo: -1 },
+    relations: { clinic: true, doctor: true },
+  });
 };
 
-export const update = async (id: string, appointment: Partial<Appointment>): Promise<Appointment | null> => {
-  return await Appointment.findByIdAndUpdate(id, appointment);
+export const insert = async (data: AddAppointment): Promise<Appointment> => {
+  const appointment = Appointment.create({
+    status: data.status,
+    scheduledTo: data.scheduledTo,
+    clinic: { id: data.clinic_id },
+    doctor: { id: data.doctor_id },
+    patient: { id: data.patient_id },
+  });
+  return await Appointment.save(appointment);
+};
+
+export const update = async (id: number, data: UpdateAppointment): Promise<Appointment> => {
+  const appointment = Appointment.create({ id: id, status: data.status });
+  return await Appointment.save(appointment);
 };
