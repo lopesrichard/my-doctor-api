@@ -1,14 +1,15 @@
 import 'reflect-metadata';
-import { NestFactory } from '@nestjs/core';
 import dotenv from 'dotenv';
+
+dotenv.config();
+
+import { NestFactory } from '@nestjs/core';
 import { db } from './data-source';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
 async function main() {
-  dotenv.config();
-  db.config();
-  await db.connect();
+  await db.initialize();
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ transform: true }));

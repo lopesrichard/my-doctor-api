@@ -1,5 +1,6 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Appointment } from './appointment';
+import { User } from './user';
 
 @Entity()
 export class Patient extends BaseEntity {
@@ -14,6 +15,10 @@ export class Patient extends BaseEntity {
 
   @Column()
   picture: string;
+
+  @OneToOne(() => User, { nullable: false, cascade: true })
+  @JoinColumn()
+  user: User;
 
   @OneToMany(() => Appointment, appointment => appointment.patient)
   appointments: Appointment[];
