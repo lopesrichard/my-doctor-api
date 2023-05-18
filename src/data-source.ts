@@ -1,7 +1,8 @@
 import fs from 'fs';
-import { DataSource, DataSourceOptions, EntityTarget, ObjectLiteral } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { RequiredVariableError } from './errors/environment';
-import { User, Address, Appointment, Availability, Clinic, Doctor, Patient, Specialty } from './entities';
+import * as Entities from './entities';
+import * as Migrations from './migrations';
 
 const host = process.env.DB_HOST;
 const user = process.env.DB_USER;
@@ -21,8 +22,8 @@ let options: DataSourceOptions = {
   password: password,
   database: database,
   logging: true,
-  entities: [Address, Appointment, Availability, Clinic, Doctor, Patient, Specialty, User],
-  migrations: ['src/migrations/*.ts'],
+  entities: Entities,
+  migrations: Migrations,
 };
 
 if (certificate) {
