@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
-export class Signup {
+export class PatientSignup {
   @IsString()
   @IsNotEmpty()
   fullname: string;

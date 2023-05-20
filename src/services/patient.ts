@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Patient } from '../entities';
 import { AddPatient } from '../models';
 
@@ -6,6 +6,12 @@ import { AddPatient } from '../models';
 export class PatientService {
   async get(id: number): Promise<Patient | null> {
     return await Patient.findOneBy({ id });
+  }
+
+  async getByUser(userId: number): Promise<Patient> {
+    const patient = await Patient.findOneBy({ user: { id: userId } });
+    if (!patient) throw new BadRequestException('Usuário não é um paciente');
+    return patient;
   }
 
   async list(): Promise<Patient[]> {

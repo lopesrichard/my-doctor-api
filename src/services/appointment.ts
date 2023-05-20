@@ -27,7 +27,7 @@ export class AppointmentService {
     return await Appointment.find({
       where: { doctor: { id } },
       order: { scheduledTo: -1 },
-      relations: { clinic: { address: true }, doctor: true },
+      relations: { clinic: { address: true }, patient: true },
     });
   }
 

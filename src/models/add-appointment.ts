@@ -17,9 +17,6 @@ export class AddAppointment {
   @Type(() => Number)
   doctor_id: number;
 
-  @IsInt()
-  @IsPositive()
-  @Type(() => Number)
   patient_id: number;
 
   status: AppointmentStatus;

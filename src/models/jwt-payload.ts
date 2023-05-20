@@ -1,4 +1,6 @@
+import { Role } from '../enums';
+
 export class JwtPayload {
-  userId: number;
-  patientId: number;
+  sub: number;
+  role: Role;
 }

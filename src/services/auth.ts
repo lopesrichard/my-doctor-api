@@ -1,8 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Signin, Signup, JwtTokens, JwtPayload } from '../models';
-import { Patient, User } from '../entities';
+import { Signin, PatientSignup, DoctorSignup, JwtTokens, JwtPayload } from '../models';
+import { Doctor, Patient, User } from '../entities';
 import bcrypt from 'bcrypt';
+import { Role } from '../enums/role';
 
 @Injectable()
 export class AuthService {
@@ -21,35 +22,31 @@ export class AuthService {
       throw new UnauthorizedException('Usuário ou senha incorretos');
     }
 
-    const patient = await Patient.findOneBy({ user: { id: user.id } });
-
-    if (!patient) {
-      throw new UnauthorizedException('Usuário não associado a nenhum paciente. Favor contactar o suporte.');
-    }
-
-    const payload: JwtPayload = { userId: user.id, patientId: patient.id };
+    const payload: JwtPayload = { sub: user.id, role: user.role };
 
     return {
       accessToken: await this.jwt.signAsync(payload),
     };
   }
 
-  async signup(signup: Signup): Promise<JwtTokens> {
+  async signup(signup: PatientSignup | DoctorSignup): Promise<JwtTokens> {
+    const { fullname, username, password, picture } = signup;
+
     var salt = bcrypt.genSaltSync();
+    var hash = await bcrypt.hash(password, salt);
 
-    var hash = await bcrypt.hash(signup.password, salt);
+    if ('document' in signup) {
+      const { document } = signup;
+      const user = User.create({ username, password: hash, role: Role.PATIENT });
+      const patient = Patient.create({ fullname, document, picture, user });
+      await Patient.save(patient);
+    } else {
+      const { registrationNumber } = signup;
+      const user = User.create({ username, password: hash, role: Role.DOCTOR });
+      const doctor = Doctor.create({ fullname, registrationNumber, picture, user });
+      await Patient.save(doctor);
+    }
 
-    const user = User.create({ username: signup.username, password: hash });
-
-    const patient = Patient.create({
-      fullname: signup.fullname,
-      document: signup.document,
-      picture: signup.picture,
-      user: user,
-    });
-
-    await Patient.save(patient);
-
-    return await this.signin({ username: signup.username, password: signup.password });
+    return await this.signin({ username, password });
   }
 }

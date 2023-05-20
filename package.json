@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "ts-node ./src/app.ts",
+    "dev": "dotenv -e .env.development ts-node ./src/app.ts",
     "build": "tsc",
-    "start": "node ./dist/app.js",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "start": "dotenv -e .env.production node ./dist/app.js",
+    "typeorm": "dotenv -e .env.development typeorm-ts-node-commonjs"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^7.0.3",
     "mysql2": "^3.3.1",

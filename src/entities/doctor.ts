@@ -1,8 +1,19 @@
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Availability } from './availability';
 import { Specialty } from './specialty';
 import { Appointment } from './appointment';
 import { Clinic } from './clinic';
+import { User } from './user';
 
 @Entity()
 export class Doctor extends BaseEntity {
@@ -20,6 +31,10 @@ export class Doctor extends BaseEntity {
 
   @Column({ nullable: false })
   rating: number;
+
+  @OneToOne(() => User, { nullable: false, cascade: true })
+  @JoinColumn()
+  user: User;
 
   @ManyToMany(() => Clinic, clinic => clinic.doctors)
   clinics: Clinic[];

@@ -7,6 +7,7 @@ export * from './add-patient';
 export * from './add-specialty';
 export * from './update-appointment';
 export * from './signin';
-export * from './signup';
+export * from './patient-signup';
+export * from './doctor-signup';
 export * from './jwt-tokens';
 export * from './jwt-payload';

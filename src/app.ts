@@ -1,7 +1,4 @@
 import 'reflect-metadata';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 import { NestFactory } from '@nestjs/core';
 import { db } from './data-source';

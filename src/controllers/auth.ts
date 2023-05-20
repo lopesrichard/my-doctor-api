@@ -1,5 +1,5 @@
-import { Public } from '../guards/auth';
-import { Signin, Signup } from '../models';
+import { Public } from '../guards/metadata';
+import { Signin, PatientSignup, DoctorSignup } from '../models';
 import { AuthService } from '../services';
 
 import { Body, Controller, Post } from '@nestjs/common';
@@ -15,7 +15,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  async signup(@Body() signup: Signup) {
+  async signup(@Body() signup: PatientSignup | DoctorSignup) {
     return await this.service.signup(signup);
   }
 }

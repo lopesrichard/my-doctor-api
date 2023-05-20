@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npm run typeorm -- migration:run -d src/migration.config.ts
+pnpm typeorm -- migration:run -d src/data-source.ts
